@@ -48,7 +48,3 @@ jobs:
     - name: Mulle-SDE Test
       run: |
         [ ! -d test ] || mulle-sde test
-      env:
-        CFLAGS: "-H"
-      env:
-        CFLAGS: -H
