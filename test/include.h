@@ -6,7 +6,6 @@
 #include <backtrace.h>
 #include <backtrace-supported.h>
 
-#include <mintomic/mintomic.h>
 #include <mulle-aba/mulle-aba.h>
 #include <mulle-allocator/mulle-allocator.h>
 #include <mulle-atexit/mulle-atexit.h>
