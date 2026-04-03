@@ -1,0 +1,4 @@
+# Assets for installation (TOC.md and other documentation)
+# These will be installed to share/<project>/
+
+src/*/assets/**

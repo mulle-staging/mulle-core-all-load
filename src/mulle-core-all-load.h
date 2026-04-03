@@ -40,7 +40,6 @@ uint32_t   mulle_core_all_load_get_version( void);
 
 #include <mulle-atinit/mulle-atinit.h>
 #include <mulle-atexit/mulle-atexit.h>
-#include <mulle-dlfcn/mulle-dlfcn.h>
 #include <mulle-stacktrace/mulle-stacktrace.h>
 
 /*

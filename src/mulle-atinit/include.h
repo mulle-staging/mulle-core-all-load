@@ -28,12 +28,16 @@
  */
 #include "_mulle-atinit-include.h"
 
-#ifdef MULLE__ATINIT_BUILD
-# define MULLE__ATINIT_GLOBAL        MULLE_C_GLOBAL
-#else
-// mulle-atinit can not be build dynamically
-# define MULLE__ATINIT_GLOBAL        extern
-#endif
+// atinit will always be statically linked!!
+#define MULLE__ATINIT_GLOBAL        extern
+
+
+// #if defined( MULLE__ATINIT_BUILD) || defined( MULLE__CORE__ALL__LOAD_BUILD)
+// # define MULLE__ATINIT_GLOBAL        MULLE_C_GLOBAL
+// #else
+// // mulle-atinit can not be build dynamically
+// # define MULLE__ATINIT_GLOBAL        extern
+// #endif
 /* You can add some more include statements here */
 
 #endif

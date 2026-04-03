@@ -15,7 +15,6 @@ src/reflect
 src/generic
 src/mulle-atexit
 src/mulle-atinit
-src/mulle-dlfcn
 src/mulle-stacktrace
 src
 )
@@ -34,7 +33,6 @@ set( PRIVATE_GENERIC_HEADERS
 src/generic/include-private.h
 src/mulle-atexit/include-private.h
 src/mulle-atinit/include-private.h
-src/mulle-dlfcn/include-private.h
 src/mulle-stacktrace/include-private.h
 )
 
@@ -44,7 +42,6 @@ src/mulle-stacktrace/include-private.h
 set( PRIVATE_HEADERS
 src/mulle-atexit/_mulle-atexit-include-private.h
 src/mulle-atinit/_mulle-atinit-include-private.h
-src/mulle-dlfcn/_mulle-dlfcn-include-private.h
 src/mulle-stacktrace/_mulle-stacktrace-include-private.h
 )
 
@@ -62,7 +59,6 @@ set( PUBLIC_GENERIC_HEADERS
 src/generic/include.h
 src/mulle-atexit/include.h
 src/mulle-atinit/include.h
-src/mulle-dlfcn/include.h
 src/mulle-stacktrace/include.h
 )
 
@@ -75,9 +71,6 @@ src/mulle-atexit/_mulle-atexit-include.h
 src/mulle-atinit/mulle-atinit.h
 src/mulle-atinit/_mulle-atinit-include.h
 src/mulle-core-all-load.h
-src/mulle-dlfcn/mulle-dlfcn.h
-src/mulle-dlfcn/_mulle-dlfcn-include.h
-src/mulle-dlfcn/_mulle-dlfcn-versioncheck.h
 src/mulle-stacktrace/mulle-stacktrace.h
 src/mulle-stacktrace/_mulle-stacktrace-include.h
 src/mulle-stacktrace/_mulle-stacktrace-versioncheck.h

@@ -2,14 +2,19 @@
 
 #include "include-private.h"
 
+
 #include "mulle-atinit.h"
 #include <string.h>
 #include <stdarg.h>
 
+#ifdef DEBUG
+//# define MULLE_ATINIT_DEBUG
+#endif
 
-//#define MULLE_ATINIT_DEBUG
 
-int   __MULLE_ATINIT_ranlib__;
+#ifdef MULLE_INCLUDE_DYNAMIC
+# error "You can't make mulle-atinit part of a shared library"
+#endif
 
 
 uint32_t   mulle_atinit_get_version( void)
@@ -30,8 +35,11 @@ struct prioritized_callback
 };
 
 // Merge two sorted subarrays into one sorted array
-static void   merge( struct prioritized_callback *arr, struct prioritized_callback *temp,
-                     int left, int mid, int right)
+static void   merge( struct prioritized_callback *arr,
+                     struct prioritized_callback *temp,
+                     int left,
+                     int mid,
+                     int right)
 {
     int i, j, k;
 
@@ -76,25 +84,26 @@ static void   merge( struct prioritized_callback *arr, struct prioritized_callba
 }
 
 // Main mergesort function
-static void mergesort_internal(struct prioritized_callback *arr,
-                              struct prioritized_callback *temp,
-                              int left, int right)
+static void   mergesort_internal( struct prioritized_callback *arr,
+                                  struct prioritized_callback *temp,
+                                  int left,
+                                  int right)
 {
-    if (left < right)
-    {
-        int mid = left + (right - left) / 2;  // Find the middle point
+   if (left < right)
+   {
+       int mid = left + (right - left) / 2;  // Find the middle point
 
-        // Sort first and second halves
-        mergesort_internal(arr, temp, left, mid);
-        mergesort_internal(arr, temp, mid + 1, right);
+       // Sort first and second halves
+       mergesort_internal(arr, temp, left, mid);
+       mergesort_internal(arr, temp, mid + 1, right);
 
-        // Merge the sorted halves
-        merge(arr, temp, left, mid, right);
-    }
+       // Merge the sorted halves
+       merge(arr, temp, left, mid, right);
+   }
 }
 
 
-static void _prioritized_callback_mergesort( struct prioritized_callback *array, size_t size)
+static void   _prioritized_callback_mergesort( struct prioritized_callback *array, size_t size)
 {
    struct prioritized_callback   *tmp;
 
@@ -112,7 +121,6 @@ static void _prioritized_callback_mergesort( struct prioritized_callback *array,
 
 static struct
 {
-   mulle_thread_once_t           once;
    mulle_thread_mutex_t          lock;
    unsigned int                  n;
    unsigned int                  size;
@@ -127,10 +135,13 @@ static void   init( void)
 #endif
    assert( MULLE_THREAD_ONCE_DATA == 0);
    mulle_thread_mutex_init( &vars.lock);
+#ifdef MULLE_ATINIT_DEBUG
+   fprintf( stderr , "_mulle_atinit init done\n");
+#endif
 }
 
 
-static void    mulle_atinit_trace( char *format, ...)
+static void   mulle_atinit_trace( char *format, ...)
 {
    va_list  args;
    char     *s;
@@ -160,12 +171,18 @@ static void   mulle_atinit_run_callbacks( void)
    void   *userinfo;
    char   *comment;
 
+#ifdef MULLE_ATINIT_DEBUG
+   fprintf( stderr , "mulle_atinit_run_callbacks\n");
+#endif
    mulle_atinit_trace( "mulle-atinit: Running callbacks of %p\n", &vars);
 
    //
    // Use a stable sort for priorities that keeps insertion order on equality.
    // Callbacks added during callback are not prioritized.
    //
+#ifdef MULLE_ATINIT_DEBUG
+   fprintf( stderr , "mulle_atinit_run_callbacks locks mutex\n");
+#endif
    mulle_thread_mutex_lock( &vars.lock);
    {
       _prioritized_callback_mergesort( vars.calls, vars.n);
@@ -189,18 +206,31 @@ loop:
       }
    }
    mulle_thread_mutex_unlock( &vars.lock);
+#ifdef MULLE_ATINIT_DEBUG
+   fprintf( stderr , "mulle_atinit_run_callbacks unlocks mutex\n");
+#endif
 
    if( f)
    {
+#ifdef MULLE_ATINIT_DEBUG
+      fprintf( stderr , "mulle_atinit_run_callbacks calls \"%s\"\n", comment ? comment : "someone");
+#endif
        mulle_atinit_trace( "mulle-atinit: call %p( %p) %s\n",
                               (void *) f, userinfo, comment ? comment : "");
 
       (*f)( userinfo);
 
+#ifdef MULLE_ATINIT_DEBUG
+      fprintf( stderr , "mulle_atinit_run_callbacks locks mutex\n");
+#endif
       mulle_thread_mutex_lock( &vars.lock);
       goto loop;  // enter locked into loop
    }
+#ifdef MULLE_ATINIT_DEBUG
+   fprintf( stderr , "mulle_atinit_run_callbacks done\n");
+#endif
 }
+
 
 #ifdef MULLE_TEST
 // THIS MUST BE STATIC FOR TECHNICAL REASONS
@@ -232,7 +262,6 @@ void   mulle_atinit_add_callback( void (*f)( void *),
 }
 
 
-
 #ifdef MULLE_TEST
 void   mulle_atinit_reset( void)
 {
@@ -241,15 +270,26 @@ void   mulle_atinit_reset( void)
 #endif
 
 
-MULLE_C_NEVER_INLINE
-void   _mulle_atinit( void (*f)( void *), void *userinfo, int priority, char *comment)
+void   _mulle_atinit( void (*f)( void *),
+                      void *userinfo,
+                      int priority,
+                      char *comment)
 {
 #ifdef MULLE_ATINIT_DEBUG
-   fprintf( stderr , "_mulle_atinit %p( %p) %s starts\n", (void *) f, userinfo, comment ? comment : "");
+   fprintf( stderr , "0x%tx: _mulle_atinit %p( %p) starts for \"%s\"\n", (intptr_t) mulle_thread_id(), (void *) f, userinfo, comment ? comment : "");
 #endif
-   mulle_thread_once( &vars.once, init);
+   mulle_thread_once_do( once)
+   {
+      init();
+   }
+
    if( ! f)
-      return;
+   {
+#ifdef MULLE_ATINIT_DEBUG
+      fprintf( stderr , "0x%tx: _mulle_atinit returns with no function to add\n", (intptr_t) mulle_thread_id());
+#endif
+     return;
+   }
 
    //
    // If everything ran already, we could only execute zero priority code
@@ -258,6 +298,10 @@ void   _mulle_atinit( void (*f)( void *), void *userinfo, int priority, char *co
    // on the way it is compiled. So we just execute them. We are after all
    // just a fix for the ELF shared library loading.
    //
+#ifdef MULLE_ATINIT_DEBUG
+   fprintf( stderr , "0x%tx: _mulle_atinit locks mutex\n", (intptr_t) mulle_thread_id());
+#endif
+
    mulle_thread_mutex_lock( &vars.lock);
    {
       if( ! vars.n && vars.size)
@@ -276,6 +320,9 @@ void   _mulle_atinit( void (*f)( void *), void *userinfo, int priority, char *co
       mulle_atinit_add_callback( f, userinfo, priority, comment);
    }
    mulle_thread_mutex_unlock( &vars.lock);
+#ifdef MULLE_ATINIT_DEBUG
+   fprintf( stderr , "0x%tx: _mulle_atinit unlocks mutex\n", (intptr_t) mulle_thread_id());
+#endif
 
    mulle_atinit_trace( "mulle-atinit: add %p( %p) \"%s\" to %p\n",
                               (void *) f, userinfo, comment ? comment : "", &vars);
@@ -283,21 +330,9 @@ void   _mulle_atinit( void (*f)( void *), void *userinfo, int priority, char *co
 
 
 //
-// This is for windows (?). Why is this still needed when doing
-// CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ? I don't understand...
-//
-void   mulle_atinit_dlsym( void (*f)( void *),
-                           void *userinfo,
-                           int priority,
-                           char *comment)
-{
-   _mulle_atinit( f, userinfo, priority, comment);
-}
-
-//
 // this is supposed to be statically linked, not because of this initializer
 // (this could run in a shared lib too), but because of the availability of
-// the `mulle_atinit` symbol. As this is statically linked it will be in the
+// the `_mulle_atinit` symbol. As this is statically linked it will be in the
 // same "load" domain, as main().
 //
 // Anyway this is how it goes:
@@ -325,12 +360,34 @@ void   mulle_atinit_dlsym( void (*f)( void *),
 // what a global function does and what a static function does and we
 // exploit this
 //
-MULLE_C_CONSTRUCTOR( load_atinit)
-static void   load_atinit( void)
+MULLE_C_CONSTRUCTOR( mulle_atinit_load)
+static void   mulle_atinit_load( void)
 {
+#ifdef MULLE_ATINIT_DEBUG
+   fprintf( stderr , "0x%tx: mulle_atinit_load executes\n", (intptr_t) mulle_thread_id());
+#endif
    mulle_atinit_trace( "mulle-atinit: constructor\n");
 
    _mulle_atinit( 0, 0, 0, NULL); // protect from evil linker optimization and do "once"
    mulle_atinit_run_callbacks();
+#ifdef MULLE_ATINIT_DEBUG
+   fprintf( stderr , "0x%tx: mulle_atinit_load done\n", (intptr_t) mulle_thread_id());
+#endif
 }
 
+
+
+
+#if defined( _WIN32) && defined( MULLE_INCLUDE_DYNAMIC) && defined( MULLE_ATINIT_DEBUG) && ! defined( MULLE__CORE__ALL_LOAD_BUILD)
+BOOL WINAPI   DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
+{
+   MULLE_C_UNUSED( hinstDLL);
+   MULLE_C_UNUSED( fdwReason);
+   MULLE_C_UNUSED( lpvReserved);
+
+   // BASICALLY: if you see this at all, its wrong!
+   if( fdwReason == DLL_PROCESS_ATTACH)
+      fprintf( stderr, "mulle-atinit DLL loaded\n");
+   return TRUE;
+}
+#endif

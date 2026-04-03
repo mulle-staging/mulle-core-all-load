@@ -1,0 +1,3 @@
+# Todo List
+does not share shirk properly anymore ???
+should probably not bequeath mulle-thread and friends

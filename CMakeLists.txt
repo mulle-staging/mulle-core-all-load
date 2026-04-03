@@ -162,6 +162,21 @@ endif()
 
 include( InstallLibrary)
 
+# Install TOC.md from constituent libraries
+if( LINK_PHASE)
+   foreach( SUB_PROJECT_NAME ${SUB_PROJECT_NAMES})
+      set( SUB_ASSETS_TOC "${CMAKE_CURRENT_SOURCE_DIR}/src/${SUB_PROJECT_NAME}/TOC.md")
+      if( EXISTS "${SUB_ASSETS_TOC}")
+         message( STATUS "Installing TOC.md from ${SUB_PROJECT_NAME}")
+         install( FILES "${SUB_ASSETS_TOC}"
+                  PERMISSIONS OWNER_WRITE OWNER_READ
+                              GROUP_READ
+                              WORLD_READ
+                  DESTINATION "share/${SUB_PROJECT_NAME}/dox")
+      endif()
+   endforeach()
+endif()
+
 if( LINK_PHASE)
    include( InstallCMakeInclude)
    include( InstallCMakePackage)

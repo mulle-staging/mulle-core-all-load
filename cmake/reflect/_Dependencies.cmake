@@ -12,7 +12,7 @@ if( MULLE_TRACE_INCLUDE)
 endif()
 
 #
-# Generated from sourcetree: B6F44310-4FE2-4231-B81E-B98D87B95B36;mulle-c11;no-all-load,no-cmake-loader,no-cmake-searchpath,no-import,no-link;mulle-core,mulle-c11
+# Generated from sourcetree: B6F44310-4FE2-4231-B81E-B98D87B95B36;mulle-c11;no-all-load,no-bequeath,no-cmake-loader,no-cmake-searchpath,no-import,no-link,no-singlephase;mulle-core,mulle-c11
 # Disable with : `mulle-sourcetree mark mulle-c11 no-header`
 # Disable for this platform: `mulle-sourcetree mark mulle-c11 no-cmake-platform-${MULLE_UNAME}`
 # Disable for a sdk: `mulle-sourcetree mark mulle-c11 no-cmake-sdk-<name>`
@@ -61,8 +61,11 @@ if( NOT MULLE__C11_HEADER)
             list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE__C11_DIR}")
             #
             unset( MULLE__C11_DEFINITIONS)
+            unset( MULLE__C11_RENDEZVOUS_GLOBALS)
             include( "${_TMP_MULLE__C11_DIR}/Definitions.cmake" OPTIONAL)
             list( APPEND INHERITED_DEFINITIONS ${MULLE__C11_DEFINITIONS})
+            include( "${_TMP_MULLE__C11_DIR}/Definitions.cmake" OPTIONAL)
+            list( APPEND RENDEZVOUS_GLOBALS ${MULLE__C11_RENDEZVOUS_GLOBALS})
             break()
          else()
             message( STATUS "${_TMP_MULLE__C11_DIR} not found")
@@ -135,8 +138,11 @@ if( NOT ${CMAKE_SYSTEM_NAME} MATCHES "Windows")
                   list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_LIBBACKTRACE_DIR}")
                   #
                   unset( LIBBACKTRACE_DEFINITIONS)
+                  unset( LIBBACKTRACE_RENDEZVOUS_GLOBALS)
                   include( "${_TMP_LIBBACKTRACE_DIR}/Definitions.cmake" OPTIONAL)
                   list( APPEND INHERITED_DEFINITIONS ${LIBBACKTRACE_DEFINITIONS})
+                  include( "${_TMP_LIBBACKTRACE_DIR}/Definitions.cmake" OPTIONAL)
+                  list( APPEND RENDEZVOUS_GLOBALS ${LIBBACKTRACE_RENDEZVOUS_GLOBALS})
                   break()
                else()
                   message( STATUS "${_TMP_LIBBACKTRACE_DIR} not found")
@@ -152,7 +158,7 @@ endif()
 
 
 #
-# Generated from sourcetree: 9423A2B7-634B-482D-8220-9D7F91796539;mulle-allocator;no-all-load,no-cmake-loader,no-cmake-searchpath,no-import;mulle-core,mulle-allocator
+# Generated from sourcetree: 9423A2B7-634B-482D-8220-9D7F91796539;mulle-allocator;no-all-load,no-bequeath,no-cmake-loader,no-cmake-searchpath,no-import,no-singlephase;mulle-core,mulle-allocator
 # Disable with : `mulle-sourcetree mark mulle-allocator no-link`
 # Disable for this platform: `mulle-sourcetree mark mulle-allocator no-cmake-platform-${MULLE_UNAME}`
 # Disable for a sdk: `mulle-sourcetree mark mulle-allocator no-cmake-sdk-<name>`
@@ -215,8 +221,11 @@ else()
                list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE__ALLOCATOR_DIR}")
                #
                unset( MULLE__ALLOCATOR_DEFINITIONS)
+               unset( MULLE__ALLOCATOR_RENDEZVOUS_GLOBALS)
                include( "${_TMP_MULLE__ALLOCATOR_DIR}/Definitions.cmake" OPTIONAL)
                list( APPEND INHERITED_DEFINITIONS ${MULLE__ALLOCATOR_DEFINITIONS})
+               include( "${_TMP_MULLE__ALLOCATOR_DIR}/Definitions.cmake" OPTIONAL)
+               list( APPEND RENDEZVOUS_GLOBALS ${MULLE__ALLOCATOR_RENDEZVOUS_GLOBALS})
                break()
             else()
                message( STATUS "${_TMP_MULLE__ALLOCATOR_DIR} not found")
@@ -236,7 +245,7 @@ endif()
 
 
 #
-# Generated from sourcetree: AAC885CB-5E4C-401B-A1AA-CD9A74FF4125;mulle-thread;no-all-load,no-cmake-loader,no-cmake-searchpath,no-import;mulle-core,mulle-thread
+# Generated from sourcetree: AAC885CB-5E4C-401B-A1AA-CD9A74FF4125;mulle-thread;no-all-load,no-bequeath,no-cmake-loader,no-cmake-searchpath,no-import,no-singlephase;mulle-core,mulle-thread
 # Disable with : `mulle-sourcetree mark mulle-thread no-link`
 # Disable for this platform: `mulle-sourcetree mark mulle-thread no-cmake-platform-${MULLE_UNAME}`
 # Disable for a sdk: `mulle-sourcetree mark mulle-thread no-cmake-sdk-<name>`
@@ -299,8 +308,11 @@ else()
                list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE__THREAD_DIR}")
                #
                unset( MULLE__THREAD_DEFINITIONS)
+               unset( MULLE__THREAD_RENDEZVOUS_GLOBALS)
                include( "${_TMP_MULLE__THREAD_DIR}/Definitions.cmake" OPTIONAL)
                list( APPEND INHERITED_DEFINITIONS ${MULLE__THREAD_DEFINITIONS})
+               include( "${_TMP_MULLE__THREAD_DIR}/Definitions.cmake" OPTIONAL)
+               list( APPEND RENDEZVOUS_GLOBALS ${MULLE__THREAD_RENDEZVOUS_GLOBALS})
                break()
             else()
                message( STATUS "${_TMP_MULLE__THREAD_DIR} not found")
@@ -314,6 +326,93 @@ mulle-core
 ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-thread${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
 ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-thread${CMAKE_STATIC_LIBRARY_SUFFIX}
 mulle-thread")
+      endif()
+   endif()
+endif()
+
+
+#
+# Generated from sourcetree: B870DC9F-A192-45B2-9ACB-3400C87BF76B;mulle-dlfcn;no-all-load,no-bequeath,no-cmake-loader,no-cmake-searchpath,no-import,no-singlephase;mulle-core,mulle-dlfcn
+# Disable with : `mulle-sourcetree mark mulle-dlfcn no-link`
+# Disable for this platform: `mulle-sourcetree mark mulle-dlfcn no-cmake-platform-${MULLE_UNAME}`
+# Disable for a sdk: `mulle-sourcetree mark mulle-dlfcn no-cmake-sdk-<name>`
+#
+if( COLLECT_DEPENDENCY_LIBRARIES_AS_NAMES)
+   list( APPEND DEPENDENCY_LIBRARIES "mulle-core")
+else()
+   if( NOT MULLE__DLFCN_LIBRARY)
+      find_library( MULLE__DLFCN_LIBRARY NAMES
+         ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-core${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
+         ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-core${CMAKE_STATIC_LIBRARY_SUFFIX}
+         mulle-core
+         ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-dlfcn${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
+         ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-dlfcn${CMAKE_STATIC_LIBRARY_SUFFIX}
+         mulle-dlfcn
+         NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_FIND_ROOT_PATH
+      )
+      if( NOT MULLE__DLFCN_LIBRARY AND NOT DEPENDENCY_IGNORE_SYSTEM_LIBARIES)
+         find_library( MULLE__DLFCN_LIBRARY NAMES
+            ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-core${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
+            ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-core${CMAKE_STATIC_LIBRARY_SUFFIX}
+            mulle-core
+            ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-dlfcn${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
+            ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-dlfcn${CMAKE_STATIC_LIBRARY_SUFFIX}
+            mulle-dlfcn
+         )
+      endif()
+      message( STATUS "MULLE__DLFCN_LIBRARY is ${MULLE__DLFCN_LIBRARY}")
+      #
+      # The order looks ascending, but due to the way this file is read
+      # it ends up being descending, which is what we need.
+      #
+      if( MULLE__DLFCN_LIBRARY)
+         #
+         # Add MULLE__DLFCN_LIBRARY to DEPENDENCY_LIBRARIES list.
+         # Disable with: `mulle-sourcetree mark mulle-dlfcn no-cmake-add`
+         #
+         list( APPEND DEPENDENCY_LIBRARIES ${MULLE__DLFCN_LIBRARY})
+         #
+         # Inherit information from dependency.
+         # Encompasses: no-cmake-searchpath,no-cmake-dependency,no-cmake-loader
+         # Disable with: `mulle-sourcetree mark mulle-dlfcn no-cmake-inherit`
+         #
+         # temporarily expand CMAKE_MODULE_PATH
+         get_filename_component( _TMP_MULLE__DLFCN_ROOT "${MULLE__DLFCN_LIBRARY}" DIRECTORY)
+         get_filename_component( _TMP_MULLE__DLFCN_ROOT "${_TMP_MULLE__DLFCN_ROOT}" DIRECTORY)
+         #
+         #
+         # Search for "Definitions.cmake" and "DependenciesAndLibraries.cmake" to include.
+         # Disable with: `mulle-sourcetree mark mulle-dlfcn no-cmake-dependency`
+         #
+         foreach( _TMP_MULLE__DLFCN_NAME "mulle-core" "mulle-dlfcn")
+            set( _TMP_MULLE__DLFCN_DIR "${_TMP_MULLE__DLFCN_ROOT}/include/${_TMP_MULLE__DLFCN_NAME}/cmake")
+            # use explicit path to avoid "surprises"
+            if( IS_DIRECTORY "${_TMP_MULLE__DLFCN_DIR}")
+               list( INSERT CMAKE_MODULE_PATH 0 "${_TMP_MULLE__DLFCN_DIR}")
+               #
+               include( "${_TMP_MULLE__DLFCN_DIR}/DependenciesAndLibraries.cmake" OPTIONAL)
+               #
+               list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE__DLFCN_DIR}")
+               #
+               unset( MULLE__DLFCN_DEFINITIONS)
+               unset( MULLE__DLFCN_RENDEZVOUS_GLOBALS)
+               include( "${_TMP_MULLE__DLFCN_DIR}/Definitions.cmake" OPTIONAL)
+               list( APPEND INHERITED_DEFINITIONS ${MULLE__DLFCN_DEFINITIONS})
+               include( "${_TMP_MULLE__DLFCN_DIR}/Definitions.cmake" OPTIONAL)
+               list( APPEND RENDEZVOUS_GLOBALS ${MULLE__DLFCN_RENDEZVOUS_GLOBALS})
+               break()
+            else()
+               message( STATUS "${_TMP_MULLE__DLFCN_DIR} not found")
+            endif()
+         endforeach()
+      else()
+         # Disable with: `mulle-sourcetree mark mulle-dlfcn no-require-link`
+         message( SEND_ERROR "MULLE__DLFCN_LIBRARY was not found in ${CMAKE_STATIC_LIBRARY_PREFIX}mulle-core${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
+${CMAKE_STATIC_LIBRARY_PREFIX}mulle-core${CMAKE_STATIC_LIBRARY_SUFFIX}
+mulle-core
+${CMAKE_STATIC_LIBRARY_PREFIX}mulle-dlfcn${CMAKE_DEBUG_POSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}
+${CMAKE_STATIC_LIBRARY_PREFIX}mulle-dlfcn${CMAKE_STATIC_LIBRARY_SUFFIX}
+mulle-dlfcn")
       endif()
    endif()
 endif()

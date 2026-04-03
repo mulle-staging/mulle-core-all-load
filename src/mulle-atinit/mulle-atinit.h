@@ -40,7 +40,20 @@
 
 #include "include.h"
 
+#include <stdlib.h>
 #include <stdint.h>
+
+
+#if defined( _WIN32) && defined( MULLE_C_TRACE_DLL_EXPORTS)
+# if defined( MULLE_INCLUDE_DYNAMIC)
+#  pragma message("MULLE_INCLUDE_DYNAMIC is defined")
+# endif
+# if defined( MULLE__ATINIT_GLOBAL)
+#  pragma message("MULLE__ATINIT_GLOBAL is defined as \"" MULLE_C_STRINGIFY_MACRO( MULLE__ATINIT_GLOBAL) "\"")
+# else
+#  pragma message("MULLE__ATINIT_GLOBAL is undefined")
+# endif
+#endif
 
 
 #define MULLE__ATINIT_VERSION  ((0UL << 20) | (2 << 8) | 0)
@@ -68,78 +81,16 @@ uint32_t   mulle_atinit_get_version( void);
 
 
 
-// we don't need it on __APPLE_ as the __attribute__((constructor)) order is
-// correct. On windows it seems hopeless, so we just give up.
-//
-// #if 0 // defined( __APPLE__) // Seems we also need it on __APPLE__ now...
-// 
-// static inline void   mulle_atinit( void (*f)( void *), void *userinfo, int priority, char *comment)
-// {
-//    (*f)( userinfo);
-// }
-// 
-// #else 
-
-#include <mulle-c11/mulle-c11.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-//
-// this is called by a `__attribute__((constructor))`
-//
-// MULLE_C_CONSTRUCTOR( load)
-// static void load( void)
-// {
-//    mulle_atinit( f, NULL, priority, NULL);
-// }
-//
-#ifdef MULLE__ATINIT_BUILD
-MULLE_C_EXTERN_RENDEZVOUS_SYMBOL
-#else
-MULLE_C_RENDEZVOUS_SYMBOL
-#endif
-void   _mulle_atinit( void (*f)( void *), void *userinfo, int priority, char *comment);
-
-static inline void    mulle_atinit_trace_bummer( char *comment)
-{
-   static char   printed_once;
-   char          *s;
-
-   comment = comment ? comment : "???";
-   s = getenv( "MULLE_ATINIT_TRACE");
-   if( (! s || *s > '0') && ! printed_once)
-   {
-      fprintf( stderr, "_mulle_atinit is not available yet for %s bummer\n", comment);
-      printed_once = 1;
-   }
-
-   if( s && *s > '1')
-   {
-      fprintf( stderr, "_mulle_atinit aborts\n");
-      abort();
-   }
-}
-
-
-static inline void   mulle_atinit_fail( void (*f)( void *),
+typedef void   mulle_atinit_function_t( void (*f)( void *),
                                         void *userinfo,
-                                        char *comment)
-{
-   char   buf[ 32];
+                                        int priority,
+                                        char *comment);
 
-   if( ! comment)
-   {
-      snprintf( buf, sizeof( buf), "%p", userinfo);
-      buf[ sizeof( buf) - 1] = 0;
-      comment = buf;
-   }
-   //
-   // If not available, warn and execute anyway and hope for the best.
-   // Many mulle-testallocator tests are in C and they don't care.
-   //
-   mulle_atinit_trace_bummer( comment);
-   (*f)( userinfo);
-}
+MULLE__ATINIT_GLOBAL
+void   _mulle_atinit( void (*f)( void *),
+                      void *userinfo,
+                      int priority,
+                      char *comment);
 
 
 static inline void   mulle_atinit( void (*f)( void *),
@@ -147,23 +98,20 @@ static inline void   mulle_atinit( void (*f)( void *),
                                    int priority,
                                    char *comment)
 {
-#ifdef __MULLE_STATICALLY_LINKED__
-   _mulle_atinit( f, userinfo, priority, comment);
-#else
-   void   (*p_mulle_atinit)( void (*f)( void *), void *, int, char *);
+#if defined( _WIN32) && defined( MULLE_INCLUDE_DYNAMIC)
+   // as this is run like once per translation unit, it's no use
+   // caching it (and also where ?)
+   mulle_atinit_function_t   *p_mulle_atinit;
 
-// MEMO: (nat) dubious now, used to be sensible :D
-# ifdef __WIN32
-   p_mulle_atinit = dlsym( MULLE_RTLD_DEFAULT, "mulle_atinit_dlsym");
-# else
-   p_mulle_atinit = dlsym( MULLE_RTLD_DEFAULT, "_mulle_atinit");
-# endif
+   p_mulle_atinit = (mulle_atinit_function_t *) mulle_dlsym_exe( "_mulle_atinit");
    if( ! p_mulle_atinit)
    {
-      mulle_atinit_fail( f, userinfo, comment);
+      fprintf( stderr, "_mulle_atinit is not available yet, bummer\n");
       return;
    }
    (*p_mulle_atinit)( f, userinfo, priority, comment);
+#else
+   _mulle_atinit( f, userinfo, priority, comment);
 #endif
 }
 
@@ -173,7 +121,6 @@ static inline void   mulle_atinit( void (*f)( void *),
 #  include "_mulle-atinit-versioncheck.h"
 # endif
 #endif
-
 
 #endif
 

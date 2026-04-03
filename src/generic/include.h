@@ -30,17 +30,20 @@
 
 #include "_mulle-core-all-load-include.h"
 
-#ifndef MULLE__CORE__ALL__LOAD_GLOBAL
-# ifdef MULLE__CORE__ALL__LOAD_BUILD
-#  define MULLE__CORE__ALL__LOAD_GLOBAL    MULLE_C_GLOBAL
-# else
-#  if defined( MULLE__CORE__ALL__LOAD_INCLUDE_DYNAMIC) || (defined( MULLE_INCLUDE_DYNAMIC) && ! defined( MULLE__CORE__ALL__LOAD_INCLUDE_STATIC))
-#   define MULLE__CORE__ALL__LOAD_GLOBAL   MULLE_C_GLOBAL
-#  else
-#   define MULLE__CORE__ALL__LOAD_GLOBAL   extern
-#  endif
-# endif
-#endif
+// core-all-load is always statically linked!
+#define MULLE__CORE__ALL__LOAD_GLOBAL   extern
+
+// #ifndef MULLE__CORE__ALL__LOAD_GLOBAL
+// # ifdef MULLE__CORE__ALL__LOAD_BUILD
+// #  define MULLE__CORE__ALL__LOAD_GLOBAL    MULLE_C_GLOBAL
+// # else
+// #  if defined( MULLE__CORE__ALL__LOAD_INCLUDE_DYNAMIC) || (defined( MULLE_INCLUDE_DYNAMIC) && ! defined( MULLE__CORE__ALL__LOAD_INCLUDE_STATIC))
+// #   define MULLE__CORE__ALL__LOAD_GLOBAL   MULLE_C_GLOBAL
+// #  else
+// #   define MULLE__CORE__ALL__LOAD_GLOBAL   extern
+// #  endif
+// # endif
+// #endif
 
 /* You can add some more include statements here */
 
