@@ -1,6 +1,7 @@
 {
    project =
    {
+      version="0.8.0";
       description="🛸 mulle-core-all-load does something";
       domain="github";
       language="c";
