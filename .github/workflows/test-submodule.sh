@@ -33,6 +33,7 @@ git submodule update --init --recursive
 cat > CMakeLists.txt << 'EOF'
 cmake_minimum_required(VERSION 3.15)
 project(submodule-test)
+add_subdirectory(mulle-core-all-load/mulle-core)
 add_subdirectory(mulle-core-all-load)
 add_executable(test main.c)
 target_link_libraries(test PRIVATE mulle-core-all-load)

@@ -32,11 +32,12 @@ git submodule update --init --recursive
 
 REM Create CMakeLists.txt
 (
-echo cmake_minimum_required^(VERSION 3.15^)
-echo project^(submodule-test^)
-echo add_subdirectory^(mulle-core-all-load^)
-echo add_executable^(test main.c^)
-echo target_link_libraries^(test PRIVATE mulle-core-all-load^)
+ echo cmake_minimum_required^(VERSION 3.15^)
+ echo project^(submodule-test^)
+ echo add_subdirectory^(mulle-core-all-load/mulle-core^)
+ echo add_subdirectory^(mulle-core-all-load^)
+ echo add_executable^(test main.c^)
+ echo target_link_libraries^(test PRIVATE mulle-core-all-load^)
 ) > CMakeLists.txt
 
 REM Create main.c
