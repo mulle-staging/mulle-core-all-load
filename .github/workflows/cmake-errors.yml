@@ -90,8 +90,16 @@ jobs:
         mkdir -p "$INSTALL_DIR"
 
     - name: Clone mulle-core repository
+      shell: bash
       run: |
-        git clone https://github.com/mulle-core/mulle-core.git "${{steps.set-install-dir.outputs.MULLE_CORE_SRC_DIR}}"
+        REPO_URL="https://github.com/${{ github.repository_owner }}/mulle-core.git"
+        if git ls-remote --exit-code "$REPO_URL" >/dev/null 2>&1
+        then
+          git clone "$REPO_URL" "${{steps.set-install-dir.outputs.MULLE_CORE_SRC_DIR}}"
+        else
+          echo "::warning::${REPO_URL} not found, falling back to mulle-core/mulle-core"
+          git clone https://github.com/mulle-core/mulle-core.git "${{steps.set-install-dir.outputs.MULLE_CORE_SRC_DIR}}"
+        fi
 
     - name: Configure, build and install mulle-core with CMake
       working-directory: "${{steps.set-install-dir.outputs.MULLE_CORE_SRC_DIR}}"
