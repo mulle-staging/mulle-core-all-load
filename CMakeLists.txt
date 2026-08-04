@@ -162,17 +162,24 @@ endif()
 
 include( InstallLibrary)
 
-# Install TOC.md from constituent libraries
+# Install the API TOC of each constituent library.
+# clib flattens paths to basename, so "asset/dox/api/toc/index.md" arrives as
+# "src/<name>/index.md" and legacy "asset/dox/TOC.md" as "src/<name>/TOC.md".
+# Always install into the canonical path mulle-sde api expects.
 if( LINK_PHASE)
    foreach( SUB_PROJECT_NAME ${SUB_PROJECT_NAMES})
-      set( SUB_ASSETS_TOC "${CMAKE_CURRENT_SOURCE_DIR}/src/${SUB_PROJECT_NAME}/TOC.md")
+      set( SUB_ASSETS_TOC "${CMAKE_CURRENT_SOURCE_DIR}/src/${SUB_PROJECT_NAME}/index.md")
+      if( NOT EXISTS "${SUB_ASSETS_TOC}")
+         set( SUB_ASSETS_TOC "${CMAKE_CURRENT_SOURCE_DIR}/src/${SUB_PROJECT_NAME}/TOC.md")
+      endif()
       if( EXISTS "${SUB_ASSETS_TOC}")
-         message( STATUS "Installing TOC.md from ${SUB_PROJECT_NAME}")
+         message( STATUS "Installing API TOC from ${SUB_PROJECT_NAME}")
          install( FILES "${SUB_ASSETS_TOC}"
+                  DESTINATION "share/${SUB_PROJECT_NAME}/dox/api/toc"
+                  RENAME "index.md"
                   PERMISSIONS OWNER_WRITE OWNER_READ
                               GROUP_READ
-                              WORLD_READ
-                  DESTINATION "share/${SUB_PROJECT_NAME}/dox")
+                              WORLD_READ)
       endif()
    endforeach()
 endif()

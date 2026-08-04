@@ -13,6 +13,11 @@ Force-linkable amalgamated library for mulle-core initialization libraries
 
 
 
+## Documentation & Guides
+
+* [API Summary](asset/dox/api/toc)
+
+
 
 
 ### You are here

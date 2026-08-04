@@ -2,8 +2,7 @@
 //  mulle-atinit.h
 //  mulle-atinit
 //
-//  Created by Nat!
-//  Copyright (c) 2017 Nat! - Mulle kybernetiK.
+//  Copyright (c) 2019 Nat! - Mulle kybernetiK.
 //  Copyright (c) 2017 Codeon GmbH.
 //  All rights reserved.
 //
@@ -34,7 +33,6 @@
 //  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 //  POSSIBILITY OF SUCH DAMAGE.
 //
-
 #ifndef mulle_atinit_h__
 #define mulle_atinit_h__
 
