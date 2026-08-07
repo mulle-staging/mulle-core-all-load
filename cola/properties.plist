@@ -59,7 +59,7 @@
       {
          description="🤱🏼 Compatibility library for deterministic initializers";
          domain="clib";
-         name="src/mulle-atinit";
+         name="mulle-core-all-load/mulle-atinit";
          repo="mulle-atinit@*";
          url="https://github.com/mulle-core/mulle-atinit@*";
          user="mulle-core";
@@ -67,7 +67,7 @@
       {
          description="👼 Compatibility library to fix atexit";
          domain="clib";
-         name="src/mulle-atexit";
+         name="mulle-core-all-load/mulle-atexit";
          repo="mulle-atexit@*";
          url="https://github.com/mulle-core/mulle-atexit@*";
          user="mulle-core";
@@ -75,7 +75,7 @@
       {
          description="👣 Stracktrace support for various OS";
          domain="clib";
-         name="src/mulle-stacktrace";
+         name="mulle-core-all-load/mulle-stacktrace";
          repo="mulle-stacktrace@*";
          url="https://github.com/mulle-core/mulle-stacktrace@*";
          user="mulle-core";

@@ -1,1 +1,1 @@
-mulle-core-all-load;${MULLE__CORE__ALL__LOAD_NODETYPE:-tar};;3DF19A69-BA81-4DF6-BEF9-601678C76CF5;${MULLE__CORE__ALL__LOAD_URL:-https://github.com/mulle-kybernetik-tv/mulle-core-all-load/archive/${MULLE_TAG}.tar.gz};${MULLE__CORE__ALL__LOAD_BRANCH};${MULLE__CORE__ALL__LOAD_TAG:-latest};;
+mulle-core-all-load;${MULLE__CORE__ALL__LOAD_NODETYPE:-tar};;89816294-7874-4F99-9BF6-72F34E3832F2;${MULLE__CORE__ALL__LOAD_URL:-https://github.com/nat/mulle-core-all-load/archive/${MULLE_TAG}.tar.gz};${MULLE__CORE__ALL__LOAD_BRANCH};${MULLE__CORE__ALL__LOAD_TAG:-latest};;

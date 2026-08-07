@@ -11,11 +11,11 @@ endif()
 # contents selected with patternfile ??-source--sources
 #
 set( SOURCES
-src/mulle-atexit/mulle-atexit.c
-src/mulle-atinit/mulle-atinit.c
-src/mulle-core-all-load.c
-src/mulle-stacktrace/mulle-stacktrace-backtrace.c
-src/mulle-stacktrace/mulle-stacktrace.c
-src/mulle-stacktrace/mulle-stacktrace-execinfo.c
-src/mulle-stacktrace/mulle-stacktrace-nop.c
+mulle-core-all-load/mulle-atexit/mulle-atexit.c
+mulle-core-all-load/mulle-atinit/mulle-atinit.c
+mulle-core-all-load/mulle-core-all-load.c
+mulle-core-all-load/mulle-stacktrace/mulle-stacktrace-backtrace.c
+mulle-core-all-load/mulle-stacktrace/mulle-stacktrace.c
+mulle-core-all-load/mulle-stacktrace/mulle-stacktrace-execinfo.c
+mulle-core-all-load/mulle-stacktrace/mulle-stacktrace-nop.c
 )
