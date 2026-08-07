@@ -70,16 +70,47 @@ file).
 
 ### Add as subproject with cmake and git
 
+[mulle-core](//github.com/mulle-core/mulle-core) is **not** bundled
+with mulle-core-all-load. Add both as sibling git submodules:
+
 ``` bash
+git submodule add https://github.com/mulle-core/mulle-core.git stash/mulle-core
 git submodule add https://github.com/mulle-core/mulle-core-all-load.git stash/mulle-core-all-load
-git submodule update --init --recursive
+git submodule update --init
 ```
+
+Note that `--recursive` is neither needed nor wanted, mulle-core-all-load contains
+no submodules of its own.
 
 Add this to your `CMakeLists.txt`:
 
 ``` cmake
+add_subdirectory( stash/mulle-core)
 add_subdirectory( stash/mulle-core-all-load)
 target_link_libraries( ${PROJECT_NAME} PRIVATE mulle-core-all-load)
+```
+
+`add_subdirectory( mulle-core)` must come **before**
+`add_subdirectory( mulle-core-all-load)`, because mulle-core-all-load depends on
+the `mulle-core` target and its headers.
+
+mulle-core-all-load is a **force-linkable** initialization library: it registers
+`atinit`/`atexit` callbacks that must end up in your binary even if no symbol of
+the library is referenced directly. The target created by `add_subdirectory`
+carries the necessary `INTERFACE` force-link options, so the
+`target_link_libraries( ${PROJECT_NAME} PRIVATE mulle-core-all-load)` above is
+sufficient. When linking mulle-core-all-load as an installed static library
+instead, force-link it explicitly:
+
+``` sh
+# Linux (GCC/Clang)
+-Wl,--whole-archive -lmulle-core-all-load -Wl,--no-whole-archive
+
+# macOS
+-force_load libmulle-core-all-load.a
+
+# Windows (MSVC)
+/WHOLEARCHIVE:mulle-core-all-load.lib
 ```
 
 

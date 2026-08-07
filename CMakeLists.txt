@@ -141,7 +141,7 @@ if( LINK_PHASE)
    # Auto-apply force-link flags for external consumers using add_subdirectory()
    # This is needed because this is a force-linkable initialization library that
    # contains code that must be linked even if not directly referenced.
-   # Without this, consumers using git submodule + add_subdirectory() would need
+   # Without this, consumers using add_subdirectory() would need
    # to manually add platform-specific force-link flags.
    if( NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
       if( APPLE)

@@ -42,15 +42,46 @@ file).
 
 ### Add as subproject with cmake and git
 
+[mulle-core](//github.com/{{ project.user }}/mulle-core) is **not** bundled
+with {{ project.repo }}. Add both as sibling git submodules:
+
 ``` bash
+git submodule add https://github.com/{{ project.user }}/mulle-core.git stash/mulle-core
 git submodule add https://github.com/{{ project.user }}/{{ project.repo }}.git stash/{{ project.repo }}
-git submodule update --init --recursive
+git submodule update --init
 ```
+
+Note that `--recursive` is neither needed nor wanted, {{ project.repo }} contains
+no submodules of its own.
 
 Add this to your `CMakeLists.txt`:
 
 ``` cmake
+add_subdirectory( stash/mulle-core)
 add_subdirectory( stash/{{ project.repo }})
 target_link_libraries( ${PROJECT_NAME} PRIVATE {{ project.repo }})
+```
+
+`add_subdirectory( mulle-core)` must come **before**
+`add_subdirectory( {{ project.repo }})`, because {{ project.repo }} depends on
+the `mulle-core` target and its headers.
+
+{{ project.repo }} is a **force-linkable** initialization library: it registers
+`atinit`/`atexit` callbacks that must end up in your binary even if no symbol of
+the library is referenced directly. The target created by `add_subdirectory`
+carries the necessary `INTERFACE` force-link options, so the
+`target_link_libraries( ${PROJECT_NAME} PRIVATE {{ project.repo }})` above is
+sufficient. When linking {{ project.repo }} as an installed static library
+instead, force-link it explicitly:
+
+``` sh
+# Linux (GCC/Clang)
+-Wl,--whole-archive -l{{ project.repo }} -Wl,--no-whole-archive
+
+# macOS
+-force_load lib{{ project.repo }}.a
+
+# Windows (MSVC)
+/WHOLEARCHIVE:{{ project.repo }}.lib
 ```
 

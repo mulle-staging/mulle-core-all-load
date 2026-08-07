@@ -21,20 +21,21 @@ git config user.email "test@example.com"
 git config user.name "Test User"
 git config protocol.file.allow always
 
-REM Add mulle-core-all-load as submodule
+REM Add mulle-core and mulle-core-all-load as sibling submodules
 git submodule add "%REPO_URL%" mulle-core-all-load
 if not "%REPO_REF%"=="" (
     cd mulle-core-all-load
     git checkout "%REPO_REF%"
     cd ..
 )
-git submodule update --init --recursive
+git submodule add https://github.com/mulle-core/mulle-core.git mulle-core
+git submodule update --init
 
 REM Create CMakeLists.txt
 (
  echo cmake_minimum_required^(VERSION 3.15^)
  echo project^(submodule-test^)
- echo add_subdirectory^(mulle-core-all-load/mulle-core^)
+ echo add_subdirectory^(mulle-core^)
  echo add_subdirectory^(mulle-core-all-load^)
  echo add_executable^(test main.c^)
  echo target_link_libraries^(test PRIVATE mulle-core-all-load^)
