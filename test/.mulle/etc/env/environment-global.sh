@@ -10,3 +10,21 @@ export MULLE_SOURCETREE_RESOLVE_TAG="NO"
 export MULLE_SOURCETREE_GRAVEYARD_ENABLED="NO"
 
 
+#
+#
+#
+export MULLE_SDE_CLEAN_DEFAULT="mulle-core-all-load"
+
+
+#
+#
+#
+export MULLE_SDE_CLEAN_BEFORE_CRAFT="YES"
+
+
+#
+#
+#
+export MULLE_FETCH_SEARCH_PATH="${MULLE_VIRTUAL_ROOT}/../.."
+
+

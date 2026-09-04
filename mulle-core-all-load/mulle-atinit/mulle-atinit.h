@@ -54,7 +54,7 @@
 #endif
 
 
-#define MULLE__ATINIT_VERSION  ((0UL << 20) | (3 << 8) | 1)
+#define MULLE__ATINIT_VERSION  ((0UL << 20) | (3 << 8) | 2)
 
 
 static inline unsigned int   mulle_atinit_get_version_major( void)
