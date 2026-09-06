@@ -27,7 +27,12 @@ if [ -n "$REPO_REF" ]; then
     git checkout "$REPO_REF"
 fi
 cd ..
-git submodule add https://github.com/mulle-core/mulle-core.git mulle-core
+# mulle-core is amalgamated: its embedded transitive deps (mulle-dlfcn,
+# mulle-stacktrace, ...) live on the branch we check out. During a prerelease
+# CI run the candidate mulle-core-all-load requires the *prerelease* versions
+# of those deps, so pull mulle-core from its "prerelease" branch (master still
+# carries the older stable amalgamation, which trips "mulle-dlfcn is too old").
+git submodule add -b prerelease https://github.com/mulle-core/mulle-core.git mulle-core
 git submodule update --init
 
 # Create CMakeLists.txt
