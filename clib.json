@@ -4,7 +4,7 @@
    "description" : "🛸 mulle-core-all-load does something",
    "keywords" : [],
    "license" : "BSD-3-Clause",
-   "repo" : "mulle-core-all-load/mulle-core-all-load",
+   "repo" : "mulle-core/mulle-core-all-load",
    "src" : [
       "asset/dox/api/toc/index.md",
       "mulle-core-all-load/generic/include-private.h",
